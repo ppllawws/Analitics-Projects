@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Интернет-магазин API",
+    "description": "API для интернет-магазина.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Получение списка товаров",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ с списком товаров",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Смартфон XYZ"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Смартфон с 6.5 дюймовым экраном и 128 ГБ памяти."
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 499.99
+                          },
+                          "image_url": {
+                            "type": "string",
+                            "example": "http://example.com/images/product1.jpg"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Получение детальной информации о товаре",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Уникальный идентификатор товара",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ с детальной информацией о товаре",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Смартфон XYZ"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Смартфон с 6.5 дюймовым экраном и 128 ГБ памяти."
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 20000
+                    },
+                    "image_url": {
+                      "type": "string",
+                      "example": "http://example.com/images/product1.jpg"
+                    },
+                    "stock": {
+                      "type": "integer",
+                      "example": 50
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "Электроника"
+                    },
+                    "specifications": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "example": "розовый"
+                        },
+                        "weight": {
+                          "type": "string",
+                          "example": "180 г"
+                        },
+                        "dimensions": {
+                          "type": "string",
+                          "example": "160x75x8 мм"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "post": {
+        "summary": "Добавление товара в корзину",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное добавление товара в корзину",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Товар успешно добавлен в корзину"
+                    },
+                    "cart": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "product_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "quantity": {
+                                "type": "integer",
+                                "example": 2
+                              }
+                            }
+                          }
+                        },
+                        "total_price": {
+                          "type": "number",
+                          "format": "float",
+                          "example": 999.98
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+openapi: 3.0.1
+info:
+  title: Клиентский сервис блокировки платежей
+  version: 1.0.0
+paths:
+  /clients/{clientId}/block:
+    post:
+      summary: Заблокировать клиента
+      description: Блокирует возможность отправки платежей для указанного клиента.
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Уникальный идентификатор клиента
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blockReason:
+                  type: string
+                  enum: [fraud, invalid_details]
+                  description: Причина блокировки
+                notes:
+                  type: string
+                  description: Дополнительные комментарии к блокировке
+            example:
+              blockReason: "fraud"
+              notes: "Подозрение на мошенничество"
+      responses:
+        '200':
+          description: Клиент успешно заблокирован
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "Успешно"
+                message: "Клиент заблокирован."
+        '404':
+          description: Клиент не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "Ошибка"
+                message: "Клиент не найден."
+
+  /clients/{clientId}/unblock:
+    post:
+      summary: Разблокировать клиента
+      description: Разблокирует возможность отправки платежей для клиента.
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Уникальный идентификатор клиента
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+                  description: Дополнительные комментарии к разблокировке
+            example:
+              notes: "Подозрения не подтвердились."
+      responses:
+        '200':
+          description: Клиент успешно разблокирован
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "Успешно"
+                message: "Клиент разблокирован."
+        '404':
+          description: Клиент не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "Ошибка"
+                message: "Клиент не найден."
+
+  /clients/{clientId}/block-status:
+    get:
+      summary: Проверить статус блокировки клиента
+      description: Проверяет, заблокирован ли клиент, и возвращает причину блокировки.
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Уникальный идентификатор клиента
+      responses:
+        '200': 
+          description: Статус блокировки клиента
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isBlocked:
+                    type: boolean
+                    description: Статус блокировки клиента
+                  blockReason:
+                    type: string
+                    description: Причина блокировки (если клиент заблокирован)
+                  blockDate:
+                    type: string
+                    format: date-time
+                    description: Дата и время блокировки
+                  notes:
+                    type: string
+                    description: Дополнительные комментарии к блокировке
+              example:
+                isBlocked: true
+                blockReason: "fraud"
+                blockDate: "2024-11-13T15:00:00Z"
+                notes: "Подозрение на мошенничество."
+        '404':
+          description: Клиент не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              example:
+                status: "Ошибка"
+                message: "Клиент не найден."
